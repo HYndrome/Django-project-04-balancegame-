@@ -1,1 +1,1 @@
-# Django-project-04-balancegame-
+# Django-project-04-balance-game
