@@ -7,13 +7,13 @@ from .forms import CustomUserCreationForm
 
 def login(request):
     if request.user.is_authenticated:
-        return redirect('accounts:login')
+        return redirect('posts:index')
 
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
         if form.is_valid():
             auth_login(request, form.get_user())
-            return redirect('accounts:login')
+            return redirect('posts:index')
     else:
         form = AuthenticationForm()
 
@@ -26,26 +26,22 @@ def login(request):
 def logout(request):
     if request.user.is_authenticated:
         auth_logout(request)
-    return
-    # return redirect('articles:index')
+    return redirect('posts:index')
 
 
 def signup(request):
     if request.user.is_authenticated:
-        return
-        # return redirect('articles:index')
+        return redirect('posts:index')
 
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
             auth_login(request, user)
-            return
-            # return redirect('articles:index')
+            return redirect('posts:index')
     else:
         form = CustomUserCreationForm()
     context = {
         'form': form,
     }
-    return
-    # return render(request, 'accounts/signup.html', context)
+    return render(request, 'accounts/signup.html', context)
