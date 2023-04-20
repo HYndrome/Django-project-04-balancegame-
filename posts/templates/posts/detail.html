@@ -75,17 +75,16 @@
   <a href="{% url 'posts:update' post.pk %}">글수정</a>
 {% endif %}
 
-  
-  <form action="{% url 'posts:comment_create' post.pk %}" method="POST">
-    {% csrf_token %}
-    {% if request.user.is_anonymous %}
-      <textarea name="" id="" cols="30" rows="10" disabled></textarea>
-      <input type="submit" value="댓글 작성" disabled>
-    {% else %}
-      {{ comment_form.as_p }}
-      <input type="submit" value="댓글 작성">
-    {% endif %}
-  </form>
+<form action="{% url 'posts:comment_create' post.pk %}" method="POST">
+  {% csrf_token %}
+  {% if request.user.is_anonymous %}
+    <textarea name="" id="" cols="30" rows="10" disabled></textarea>
+    <input type="submit" value="댓글 작성" disabled>
+  {% else %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="댓글 작성">
+  {% endif %}
+</form>
 
   {% for comment in comments %}
     <div>
