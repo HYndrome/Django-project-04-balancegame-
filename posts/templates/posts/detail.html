@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <form action="{% url 'posts:answer' post.pk 1 %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}">
+  </form>
+  <form action="{% url 'posts:answer' post.pk 2 %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }}">
+  </form>
+  <a href="{% url 'posts:index' %}">back</a>
+{% endblock content %}
