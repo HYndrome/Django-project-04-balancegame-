@@ -11,10 +11,24 @@
 
 {% block content %}
   <h1>{{ post.title }}</h1>
+
+  {% if request.user.is_authenticated %}
+    <form action="{% url 'posts:likes' post.pk %}" method="POST">
+      {% csrf_token %}
+      {% if request.user in post.like_users.all %}
+      <input type="submit" value="좋아요 취소">
+      <p>좋아요 수 - {{ post.like_users.count }}</p>
+      {% else %}
+      <input type="submit" value="좋아요">
+      <p>좋아요 수 - {{ post.like_users.count }}</p>
+      {% endif %}
+    </form>
+  {% endif %}
+
   <div class="d-flex">
     <div>
       <p>{{ post.select1_content }}</p>
-      <div class="img-size">
+      <div class="img-size d-flex align-items-center">
         {% if post.image1 %}
           <img class="img-fluid" src="{{ post.image1.url }}" alt="{{ post.select1_content }} 이미지">
         {% else %}
@@ -45,7 +59,27 @@
     </div>
   </div>
 
-
-
+  
   <a href="{% url 'posts:index' %}">back</a>
+  
+  <form action="{% url 'posts:comment_create' post.pk %}" method="POST">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <input type="submit" value="댓글 작성">
+  </form>
+
+  {% for comment in comments %}
+    <div>
+      <p>댓글 작성자 - 
+        {{ comment.user }}
+      </p>
+      <p>댓글 번호 - 
+        {{ comment.pk }}
+      </p>
+      <p>댓글 내용 - 
+        {{ comment.content }}
+      </p>
+    </div>
+  {% endfor %}
+
 {% endblock content %}
