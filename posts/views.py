@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .forms import PostForm, CommentForm
-from .models import Post
+from .models import Post, Comment
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
@@ -11,6 +12,7 @@ def index(request):
     return render(request, 'posts/index.html', context)
 
 
+@login_required
 def create(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -39,6 +41,7 @@ def detail(request, pk):
     return render(request, 'posts/detail.html', context)
 
 
+@login_required
 def answer(request, post_pk, answer):
     post = Post.objects.get(pk=post_pk)
     if (request.user in post.select1_users.all()) or (request.user in post.select2_users.all()):
@@ -51,6 +54,7 @@ def answer(request, post_pk, answer):
         return redirect('posts:detail', post_pk)
     
 
+@login_required
 def likes(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     if post.like_users.filter(pk=request.user.pk).exists():
@@ -60,6 +64,7 @@ def likes(request, post_pk):
     return redirect('posts:detail', post_pk)
 
 
+@login_required
 def comment_create(request, post_pk):
     post = Post.objects.get(pk=post_pk)
     comment_form = CommentForm(request.POST)
@@ -74,3 +79,13 @@ def comment_create(request, post_pk):
         'comment_form': comment_form,
     }
     return render(request, 'posts/detail.html', context)
+
+
+@login_required
+def comment_likes(request, post_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    if comment.like_users.filter(pk=request.user.pk).exists():
+        comment.like_users.remove(request.user)
+    else:
+        comment.like_users.add(request.user)
+    return redirect('posts:detail', post_pk)

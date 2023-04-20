@@ -73,12 +73,20 @@
       <p>댓글 작성자 - 
         {{ comment.user }}
       </p>
-      <p>댓글 번호 - 
-        {{ comment.pk }}
-      </p>
       <p>댓글 내용 - 
         {{ comment.content }}
       </p>
+      <p>좋아요 수 - {{ comment.like_users.count }}</p>
+      {% if request.user.is_authenticated %}
+        <form action="{% url 'posts:comment_likes' post.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          {% if request.user in comment.like_users.all %}
+            <input type="submit" value="좋아요 취소">
+          {% else %}
+            <input type="submit" value="좋아요">
+          {% endif %}
+        </form>
+      {% endif %}
     </div>
   {% endfor %}
 
