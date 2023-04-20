@@ -1,0 +1,9 @@
+{% extends 'posts/create.html' %}
+
+{% block title %}
+  Update
+{% endblock title %}
+
+{% block create__url %}
+  {% url 'posts:update' post.pk %}
+{% endblock create__url %}

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
+
+{% block title %}
+{{ person.username }}의 프로필
+{% endblock title %}
+
 {% block content %}
-  <h1>{{ person.username }}의 프로필</h1>
   <hr>
 
   <h3>참여한 게임</h3>

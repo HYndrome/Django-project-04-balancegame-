@@ -9,9 +9,11 @@
   }
 {% endblock style %}
 
-{% block content %}
-  <h1>{{ post.title }}</h1>
+{% block title %}
+  {{ post.title }}
+{% endblock title %}
 
+{% block content %}
   {% if request.user.is_authenticated %}
     <form action="{% url 'posts:likes' post.pk %}" method="POST">
       {% csrf_token %}
@@ -38,7 +40,7 @@
       
       <form action="{% url 'posts:answer' post.pk 1 %}" method="POST">
         {% csrf_token %}
-        <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}">
+        <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}" {% if request.user.is_anonymous %}disabled{% endif %}>
       </form>
     </div>
 
@@ -54,18 +56,35 @@
 
       <form action="{% url 'posts:answer' post.pk 2 %}" method="POST">
         {% csrf_token %}
-        <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }}">
+        <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }} "{% if request.user.is_anonymous %}disabled{% endif %}>
       </form> 
     </div>
   </div>
 
   
   <a href="{% url 'posts:index' %}">back</a>
+
+  {% if request.user == post.user %}
+      <form action="{% url 'posts:delete' post.pk %}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="글 삭제">
+      </form>
+  {% endif %}
+
+  {% if request.user == post.user %}
+  <a href="{% url 'posts:update' post.pk %}">글수정</a>
+{% endif %}
+
   
   <form action="{% url 'posts:comment_create' post.pk %}" method="POST">
     {% csrf_token %}
-    {{ comment_form.as_p }}
-    <input type="submit" value="댓글 작성">
+    {% if request.user.is_anonymous %}
+      <textarea name="" id="" cols="30" rows="10" disabled></textarea>
+      <input type="submit" value="댓글 작성" disabled>
+    {% else %}
+      {{ comment_form.as_p }}
+      <input type="submit" value="댓글 작성">
+    {% endif %}
   </form>
 
   {% for comment in comments %}
@@ -84,6 +103,13 @@
             <input type="submit" value="좋아요 취소">
           {% else %}
             <input type="submit" value="좋아요">
+          {% endif %}
+        </form>
+
+        <form action="{% url 'posts:comment_delete' post.pk comment.pk %}" method="POST">
+          {% csrf_token %}
+          {% if request.user == comment.user %}
+            <input type="submit" value="댓글 삭제">
           {% endif %}
         </form>
       {% endif %}

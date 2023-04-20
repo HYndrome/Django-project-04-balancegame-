@@ -29,6 +29,34 @@ def create(request):
     return render(request, 'posts/create.html', context)
 
 
+@login_required
+def delete(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.user == post.user:
+        post.delete()
+    return redirect('posts:index')
+
+
+@login_required
+def update(request, pk):
+    post = Post.objects.get(pk=pk)
+    if request.user == post.user:
+        if request.method == 'POST':
+            form = PostForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                form.save()
+                return redirect('posts:detail', post.pk)
+        else:
+            form = PostForm(instance=post)
+    else:
+        return redirect('views:detail', post.pk)
+    context = {
+        'form':form,
+        'post':post,
+    }
+    return render(request, 'posts/update.html', context)    
+
+
 def detail(request, pk):
     post = Post.objects.get(pk=pk)
     comments = post.comment_set.all()
@@ -88,4 +116,12 @@ def comment_likes(request, post_pk, comment_pk):
         comment.like_users.remove(request.user)
     else:
         comment.like_users.add(request.user)
+    return redirect('posts:detail', post_pk)
+
+
+@login_required
+def comment_delete(request, post_pk, comment_pk):
+    comment = Comment.objects.get(pk=comment_pk)
+    if request.user == comment.user:
+        comment.delete()
     return redirect('posts:detail', post_pk)
