@@ -11,3 +11,7 @@ class Post(models.Model):
     select2_content = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    def image_path(instance, filename):
+        return f'posts/{instance.pk}/{filename}'
+    image1 = models.ImageField(upload_to=image_path, blank=True, null=True)
+    image2 = models.ImageField(upload_to=image_path, blank=True, null=True)

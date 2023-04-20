@@ -1,13 +1,51 @@
 {% extends 'base.html' %}
+
+{% load static %}
+
+{% block style %}
+  .img-size {
+    width: 200px;
+    height: 200px;
+  }
+{% endblock style %}
+
 {% block content %}
   <h1>{{ post.title }}</h1>
-  <form action="{% url 'posts:answer' post.pk 1 %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}">
-  </form>
-  <form action="{% url 'posts:answer' post.pk 2 %}" method="POST">
-    {% csrf_token %}
-    <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }}">
-  </form>
+  <div class="d-flex">
+    <div>
+      <p>{{ post.select1_content }}</p>
+      <div class="img-size">
+        {% if post.image1 %}
+          <img class="img-fluid" src="{{ post.image1.url }}" alt="{{ post.select1_content }} 이미지">
+        {% else %}
+          <img class="img-fluid" src="{% static 'no_image.png' %}" alt="이미지 없음">
+        {% endif %}
+      </div>
+      
+      <form action="{% url 'posts:answer' post.pk 1 %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}">
+      </form>
+    </div>
+
+    <div>
+      <p>{{ post.select2_content }}</p>
+      <div class="img-size d-flex align-items-center">
+        {% if post.image2 %}
+          <img class="img-fluid" src="{{ post.image2.url }}" alt="{{ post.select2_content }} 이미지">
+        {% else %}
+          <img class="img-fluid" src="{% static 'no_image.png' %}" alt="이미지 없음">
+        {% endif %}
+      </div>
+
+      <form action="{% url 'posts:answer' post.pk 2 %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }}">
+      </form> 
+    </div>
+  </div>
+
+
+
   <a href="{% url 'posts:index' %}">back</a>
 {% endblock content %}
