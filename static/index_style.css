@@ -1,0 +1,46 @@
+a {
+  text-decoration: none;
+  color: #337ab7;
+  cursor: pointer;
+}
+
+.image1 {
+  float: left;
+  width: 50%;
+  height: 180px;
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+}
+
+.image2 {
+  width: 50%;
+  height: 180px;
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+}
+
+.no-image1 {
+  float: left;
+  width: 50%;
+  height: 180px;
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+}
+
+.no-image2 {
+  width: 50%;
+  height: 180px;
+  background-size: cover;
+  background-position: center top;
+  display: flex;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #676a6c;
+  cursor: pointer;
+}
