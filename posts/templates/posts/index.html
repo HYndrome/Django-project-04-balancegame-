@@ -5,7 +5,7 @@
 {% endblock link %}
 
 {% block content %}
-<div class="row row-cols-2 row-cols-md-4 row-cols-l-6 g-2">
+<div class="row row-cols-2 row-cols-md-4 row-cols-xl-6 g-2">
   {% for post in posts %}
   <a href="{% url 'posts:detail' post.pk %}">
     <div class="col">
@@ -22,9 +22,15 @@
           {% else %}
             <div class="no-image2" style="background-image: url({% static 'no_image.png' %});"></div>
           {% endif %}
+          <div class="d-flex">
+            <div class="content">{{ post.select1_content }}</div>
+            <div class="content">{{ post.select2_content }}</div>
+          </div>
         </div>
-        <div class="card-body">
-          <div class="card-title title">{{ post.title }}</div>
+        <div class="title px-3">{{ post.title }}</div>
+        <div class="mt-1 d-flex justify-content-evenly">
+          <p class="mb-1"><i class="bi bi-hand-thumbs-up"></i> {{ post.like_users.count }}</p>
+          <p class="mb-1"><i class="bi bi-person-fill-check"></i> {{ post.select1_users.count|add:post.select2_users.count }}</p>
         </div>
       </div>
     </div>
