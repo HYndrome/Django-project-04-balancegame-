@@ -3,9 +3,79 @@
 {% load static %}
 
 {% block style %}
-  .img-size {
-    width: 200px;
-    height: 200px;
+  .balancegame-container {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    display: flex;
+  }
+
+  .balancegame-title {
+    width: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: rgb(255, 255, 255);
+    text-align: center;
+    z-index:100;
+  }
+
+  .balancegame-form {
+    width: 100%;
+    height: 100%;
+  }
+
+  .balancegame-select {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 1);
+  }
+
+  
+  .balancegame-select:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .balancegame-imgcontainer {
+    width: 100%;
+  }
+
+  .balancegame-img {
+    width: 100%
+  }
+
+  .balancegame-content {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: #1ab394 1px 0 10px;
+
+  }
+
+  .balancegame-count {
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    color: white;
+    font-size: 2rem;
+    font-weight: bold;
+    text-shadow: #1ab394 1px 0 10px;
+  }
+
+  .balancegame-vsimgcontainer {
+    position: absolute;
+    transform: translate(-50%, 0);
+    top: 40%;
+    left: 50%;
+    height: 5rem;
+    width: 5rem;
   }
 {% endblock style %}
 
@@ -14,54 +84,71 @@
 {% endblock title %}
 
 {% block content %}
-  {% if request.user.is_authenticated %}
-    <form action="{% url 'posts:likes' post.pk %}" method="POST">
-      {% csrf_token %}
-      {% if request.user in post.like_users.all %}
-      <input type="submit" value="좋아요 취소">
-      <p>좋아요 수 - {{ post.like_users.count }}</p>
-      {% else %}
-      <input type="submit" value="좋아요">
-      <p>좋아요 수 - {{ post.like_users.count }}</p>
-      {% endif %}
-    </form>
-  {% endif %}
-
-  <div class="d-flex">
-    <div>
-      <p>{{ post.select1_content }}</p>
-      <div class="img-size d-flex align-items-center">
-        {% if post.image1 %}
-          <img class="img-fluid" src="{{ post.image1.url }}" alt="{{ post.select1_content }} 이미지">
-        {% else %}
-          <img class="img-fluid" src="{% static 'no_image.png' %}" alt="이미지 없음">
-        {% endif %}
-      </div>
-      
-      <form action="{% url 'posts:answer' post.pk 1 %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="{{ post.select1_content }} - {{ post.select1_users.all|length }}" {% if request.user.is_anonymous %}disabled{% endif %}>
-      </form>
+  <div class="balancegame-container mb-3">
+    <div class="balancegame-title">
+      {{ post.title }}
     </div>
-
-    <div>
-      <p>{{ post.select2_content }}</p>
-      <div class="img-size d-flex align-items-center">
-        {% if post.image2 %}
-          <img class="img-fluid" src="{{ post.image2.url }}" alt="{{ post.select2_content }} 이미지">
-        {% else %}
-          <img class="img-fluid" src="{% static 'no_image.png' %}" alt="이미지 없음">
-        {% endif %}
+    
+    <form class="balancegame-form" id="formSelect1" action="{% url 'posts:answer' post.pk 1 %}" method="POST">
+      {% csrf_token %}
+      {% comment %} <input type="submit" style="display: none;"> {% endcomment %}
+      <div class="balancegame-select" onclick="submitForm()">
+        <div class="balancegame-imgcontainer">
+          {% if post.image1 %}
+            <img class="balancegame-img" src="{{ post.image1.url }}" alt="{{ post.select1_content }} 이미지">
+          {% else %}
+            <img class="balancegame-img" src="{% static 'no_image.png' %}" alt="이미지 없음">
+          {% endif %}
+        </div>
+        <div class="balancegame-content">
+          {{ post.select1_content }}
+        </div>
+        <div class="balancegame-count">
+          {{ post.select1_users.all|length }}
+        </div>
       </div>
-
-      <form action="{% url 'posts:answer' post.pk 2 %}" method="POST">
-        {% csrf_token %}
-        <input type="submit" value="{{ post.select2_content }} - {{ post.select2_users.all|length }} "{% if request.user.is_anonymous %}disabled{% endif %}>
-      </form> 
+    </form>
+    
+    <form class="balancegame-form" id="formSelect2" action="{% url 'posts:answer' post.pk 2 %}" method="POST">
+      {% csrf_token %}
+      <div class="balancegame-select" onclick="submitForm()">
+        <div class="balancegame-imgcontainer">
+          {% if post.image2 %}
+            <img class="balancegame-img" src="{{ post.image2.url }}" alt="{{ post.select2_content }} 이미지">
+          {% else %}
+            <img class="balancegame-img" src="{% static 'no_image.png' %}" alt="이미지 없음">
+          {% endif %}
+        </div>
+        <div class="balancegame-content">
+          {{ post.select2_content }}
+        </div>
+        <div class="balancegame-count">
+          {{ post.select2_users.all|length }}
+        </div>
+      </div>
+    </form>
+    <div class="balancegame-vsimgcontainer">
+      <img class="balancegame-img" src="{% static 'vs_image.png' %}" alt="versus 이미지">
     </div>
   </div>
 
-  
+  <div class="d-flex">
+    <p>좋아요 수 - {{ post.like_users.count }}</p>
+    {% if request.user.is_authenticated %}
+        <form action="{% url 'posts:likes' post.pk %}" method="POST">
+          {% csrf_token %}
+          {% if request.user in post.like_users.all %}
+            <input type="submit" value="좋아요 취소">
+          {% else %}
+            <input type="submit" value="좋아요">
+          {% endif %}
+        </form>
+    {% endif %}
+    
+  </div>
+
+
+
   <a href="{% url 'posts:index' %}">back</a>
 
   {% if request.user == post.user %}
@@ -114,5 +201,16 @@
       {% endif %}
     </div>
   {% endfor %}
+
+
+<script>
+  function submitForm() {
+    document.getElementById('formSelect1').submit();
+  }
+  function submitForm() {
+    document.getElementById('formSelect2').submit();
+  }
+</script>
+
 
 {% endblock content %}
