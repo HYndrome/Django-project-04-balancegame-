@@ -212,7 +212,7 @@
   {% endif %}
   </div>
 
-<form class="mb-3" action="{% url 'posts:comment_create' post.pk %}" method="POST">
+{% comment %} <form class="mb-3" action="{% url 'posts:comment_create' post.pk %}" method="POST">
   {% csrf_token %}
   {% if request.user.is_anonymous %}
     <textarea name="" id="" cols="30" rows="10" disabled></textarea>
@@ -221,7 +221,7 @@
     {{ comment_form.as_p }}
     <input class="btn btn-success me-3" type="submit" value="댓글 작성">
   {% endif %}
-</form>
+</form> {% endcomment %}
 
   {% for comment in comments %}
     <div class="container-comment rounded">
@@ -239,7 +239,7 @@
         {% if request.user.is_authenticated %}
           <form class="me-3" action="{% url 'posts:comment_likes' post.pk comment.pk %}" method="POST">
             {% csrf_token %}
-              {% if request.user in post.like_users.all %}
+              {% if request.user in comment.like_users.all %}
                 <button class="btn text-success">
                   <i type="submit" class="bi bi-hand-thumbs-up-fill"></i>
                   {{ comment.like_users.count }}
@@ -266,6 +266,23 @@
         </div>
       </div>
     {% endfor %}
+    <div style="width:800px;">
+      {% if request.user.is_authenticated %}
+        <label for="commentinput" class="form-label">댓글작성</label>
+        <form class="d-flex" action="{% url 'posts:comment_create' post.pk %}" method="POST">
+          {% csrf_token %}
+          {% for form in comment_form %}
+            {{ form }}
+          {% endfor %}
+          <input class="btn btn-outline-success ms-2" type="submit">
+        </form>
+      {% else %}
+        <form action="#">
+          <label for="pleaselogin" class="form-label">댓글작성</label>
+          <input type="text" class="form-control" id="pleaselogin" placeholder="댓글을 작성하기 위해서는 로그인을 해주세요." disabled>
+        </form>
+      {% endif %}
+    </div>
 
 
 
