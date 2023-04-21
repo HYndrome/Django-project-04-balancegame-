@@ -7,23 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>14조_balancegame</title>
     <style>
+      .text {
+        text-decoration : none;
+        color : black;
+      }
+
+      #cursor:hover {
+        color : #1ab394;
+      }
+
+      .nav-left {
+        float : left;
+      }
+
+      .navbar-margin {
+        margin-left: 52rem;
+      }
       {% block style %}
-        .text {
-          text-decoration : none;
-          color : black;
-        }
-
-        #cursor:hover {
-          color : #1ab394;
-        }
-
-        .nav-left {
-          float : left;
-        }
-
-        .navbar-margin {
-          margin-left: 52rem;
-        }
       {% endblock style %}
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
@@ -85,7 +85,7 @@
       <h1>{% block title %}{% endblock title %}</h1>
       {% block content %}{% endblock content %}
     </div>
-    <footer class="bg-light p-3 fixed-bottom">
+    <footer class="bg-light p-2 fixed-bottom">
       <div class="container">
         <div class="row">
           <div class="col-12 col-md-6 text-center text-md-start">
