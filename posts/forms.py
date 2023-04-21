@@ -1,7 +1,7 @@
 from django import forms
 from .models import Post, Comment
 from imagekit.forms import ProcessedImageField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, ResizeToCover, ResizeToFit
 
 class PostForm(forms.ModelForm):
     image1 = ProcessedImageField(
@@ -12,9 +12,9 @@ class PostForm(forms.ModelForm):
             }
         ),
         spec_id='posts:image1',
-        processors=[ResizeToFill(200,200)],
+        processors=[ResizeToCover(200,200)],
         format='JPEG',
-        options={'quality' : 50},
+        options={'quality' : 80},
         required=False,
     )
 
