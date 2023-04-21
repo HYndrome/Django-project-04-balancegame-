@@ -172,14 +172,19 @@
   </div>
 
   <div class="d-flex align-items-center mb-3">
-    <span class="me-5">좋아요 수 - {{ post.like_users.count }}</span>
     {% if request.user.is_authenticated %}
         <form action="{% url 'posts:likes' post.pk %}" method="POST">
           {% csrf_token %}
           {% if request.user in post.like_users.all %}
-            <input class="btn btn-success" type="submit" value="좋아요 취소">
+            <button class="btn text-success">
+              <i type="submit" class="bi bi-hand-thumbs-up-fill"></i>
+              {{ post.like_users.count }}
+            </button>
           {% else %}
-            <input class="btn btn-success" type="submit" value="좋아요">
+            <button class="btn text-success">
+              <i type="submit" class="bi bi-hand-thumbs-up"></i>
+              {{ post.like_users.count }}
+            </button>
           {% endif %}
         </form>
     {% endif %}
