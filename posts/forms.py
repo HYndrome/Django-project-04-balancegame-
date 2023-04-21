@@ -85,7 +85,7 @@ class CommentForm(forms.ModelForm):
             attrs={
                 'placeholder': '내용',
                 "class": "form-control",
-                'style': 'width: 500px; height: 100px;',
+                'style': 'width: 94%; height: 100px;',
             }
         ),
     )
