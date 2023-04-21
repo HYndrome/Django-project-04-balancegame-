@@ -98,7 +98,7 @@
     <form class="balancegame-form" id="formSelect1" action="{% url 'posts:answer' post.pk 1 %}" method="POST">
       {% csrf_token %}
       {% comment %} <input type="submit" style="display: none;"> {% endcomment %}
-      <div class="balancegame-select" onclick="submitForm()">
+      <div class="balancegame-select" onclick="submitForm1()">
         <div class="balancegame-imgcontainer">
           {% if post.image1 %}
             <img class="balancegame-img" src="{{ post.image1.url }}" alt="{{ post.select1_content }} 이미지">
@@ -117,7 +117,7 @@
     
     <form class="balancegame-form" id="formSelect2" action="{% url 'posts:answer' post.pk 2 %}" method="POST">
       {% csrf_token %}
-      <div class="balancegame-select" onclick="submitForm()">
+      <div class="balancegame-select" onclick="submitForm2()">
         <div class="balancegame-imgcontainer">
           {% if post.image2 %}
             <img class="balancegame-img" src="{{ post.image2.url }}" alt="{{ post.select2_content }} 이미지">
@@ -211,10 +211,10 @@
 
 
 <script>
-  function submitForm() {
+  function submitForm1() {
     document.getElementById('formSelect1').submit();
   }
-  function submitForm() {
+  function submitForm2() {
     document.getElementById('formSelect2').submit();
   }
 </script>
